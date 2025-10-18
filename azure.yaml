@@ -1,0 +1,15 @@
+name: lemp-stack
+metadata:
+  template: lemp-docker-otel
+
+infra:
+  provider: terraform
+  path: infra
+
+services:
+  web:
+    language: docker
+    project: ./src
+    host: vm
+    docker:
+      path: ./src/docker-compose.yml

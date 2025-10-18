@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:1.25
+    container_name: lemp-web
+    volumes:
+      - ./logs:/var/log/nginx
+    ports:
+      - "80:80"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: otel-collector
+    depends_on:
+      - nginx
+    volumes:
+      - ./logs:/var/log/nginx
+      - ./otel-config.yaml:/etc/otel-collector-config.yaml
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    environment:
+      LOKI_ENDPOINT: "${LOKI_ENDPOINT}"   # Example: http://loki:3100/loki/api/v1/push
